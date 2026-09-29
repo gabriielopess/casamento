@@ -64,6 +64,180 @@ footer{padding:42px 18px}footer h2{font-size:36px}footer p{font-size:10px}
   .gift-bottom .pill{display:flex;justify-content:center;align-items:center;width:min(100%,112px);max-width:112px}
   .gift-card[data-gift-id="3"] .gift-image img{inset:13%;width:74%;height:74%}
 }
+
+
+/* Refinamento final: capa mais baixa + modal PIX responsivo no celular */
+.hero-inner{
+  top:auto;
+  bottom:clamp(26px,4.2vw,66px);
+  transform:none;
+}
+.hero h1{margin:8px 0 12px}
+.hero .date{margin:0}
+.countdown{margin-top:16px}
+
+@media(max-width:620px){
+  /* Capa: só chamada, nomes, data/local e cronômetro, agrupados no canto inferior esquerdo */
+  .hero-inner{
+    left:12px;
+    top:auto;
+    bottom:10px;
+    transform:none;
+    width:72%;
+  }
+  .hero .eyebrow{margin:0 0 3px}
+  .hero h1{margin:3px 0 5px;line-height:.93}
+  .hero .date{margin:0;line-height:1.25}
+  .countdown{margin-top:6px}
+
+  /* PIX: card compacto, sem rolagem lateral e com tudo importante visível de uma vez */
+  .modal-backdrop{
+    padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom));
+    overflow:hidden;
+    align-items:center;
+    justify-content:center;
+  }
+  .modal{
+    position:relative;
+    width:min(390px,100%);
+    max-width:100%;
+    max-height:calc(100dvh - 16px);
+    padding:13px 13px 11px;
+    border-radius:17px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .modal-top{
+    gap:8px;
+    align-items:flex-start;
+    padding-right:34px;
+  }
+  .modal-top .eyebrow{font-size:6.5px;letter-spacing:.13em}
+  .modal h3{
+    font-size:21px;
+    line-height:1.04;
+    margin:3px 0 3px;
+  }
+  .modal .sub{
+    font-size:8.5px;
+    line-height:1.3;
+  }
+  .close{
+    position:absolute;
+    top:9px;
+    right:9px;
+    width:29px;
+    height:29px;
+    display:grid;
+    place-items:center;
+    padding:0;
+    border-radius:50%;
+    font-size:19px;
+    line-height:1;
+    z-index:2;
+  }
+  .amount-box{
+    margin:9px 0 8px;
+    padding:9px 10px 8px;
+    border-radius:12px;
+  }
+  .amount-box label{
+    font-size:7px;
+    letter-spacing:.09em;
+    margin-bottom:3px;
+  }
+  .amount-input{
+    font-size:20px;
+    line-height:1;
+    padding:2px 0 5px;
+  }
+  .amount-help{
+    font-size:7.5px;
+    line-height:1.25;
+    margin-top:4px;
+  }
+  .pix-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:7px;
+    min-width:0;
+  }
+  .qr-wrap{
+    width:150px;
+    max-width:46vw;
+    min-height:0;
+    aspect-ratio:1/1;
+    margin:0 auto;
+    padding:6px;
+    border-radius:12px;
+    overflow:hidden;
+  }
+  #qrImg{
+    display:block;
+    width:100%;
+    height:100%;
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+  }
+  #qrFallback{
+    font-size:7.5px!important;
+    line-height:1.25;
+    padding:4px;
+  }
+  .pix-grid>div:last-child{min-width:0;width:100%}
+  .pix-meta{
+    font-size:8px;
+    line-height:1.4;
+    text-align:center;
+  }
+  .pixcode{
+    width:100%;
+    max-width:100%;
+    max-height:48px;
+    margin-top:6px;
+    padding:7px;
+    border-radius:9px;
+    font-size:7px;
+    line-height:1.25;
+    white-space:normal;
+    word-break:break-all;
+    overflow-wrap:anywhere;
+    overflow-y:auto;
+    overflow-x:hidden;
+  }
+  .modal-actions{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:6px;
+    margin-top:7px;
+  }
+  .modal-actions .pill{
+    min-width:0;
+    width:100%;
+    padding:7px 5px;
+    font-size:6.4px;
+    line-height:1.15;
+    letter-spacing:.035em;
+    white-space:normal;
+  }
+  .status{
+    min-height:9px;
+    margin-top:4px;
+    font-size:7px;
+    line-height:1.2;
+  }
+}
+
+@media(max-width:360px){
+  .modal{padding:11px 11px 9px}
+  .qr-wrap{width:138px;max-width:44vw}
+  .modal h3{font-size:19px}
+  .amount-input{font-size:18px}
+  .modal-actions .pill{font-size:6px;padding:6px 4px}
+}
+
 </style>
 </head>
 <body>
@@ -88,10 +262,6 @@ footer{padding:42px 18px}footer h2{font-size:36px}footer p{font-size:10px}
     <h1>Thaís <span>&</span> Cássio</h1>
     <div class="date">19 de Dezembro de 2026 • Tocantins, MG</div>
     <div id="countdown" class="countdown"></div>
-    <div class="actions">
-      <a class="pill gold-btn" href="#confirmacao">Confirmar presença</a>
-      <a class="pill light-btn" href="#presentes">Escolher um presente</a>
-    </div>
   </div>
 </section>
 
