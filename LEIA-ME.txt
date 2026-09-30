@@ -1,0 +1,10 @@
+THAÍS & CÁSSIO — GitHub Pages + Vercel + Supabase
+
+1) Suba index.html e noivos.html para a raiz do repositório.
+2) Suba também a pasta api/ completa. Ela contém JavaScript para a Vercel, NÃO PHP.
+3) O GitHub Pages continuará servindo o site estático normalmente.
+4) Como o repositório já está conectado à Vercel, a Vercel executará os arquivos api/*.js como funções serverless.
+5) Aguarde o deploy da Vercel finalizar antes de testar o login.
+6) A área privada continua em: https://thaisecassio.com.br/noivos.html
+
+A pasta api/ desta versão é necessária para contornar a falha de conexão direta do navegador com o Supabase.

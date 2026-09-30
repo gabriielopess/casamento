@@ -31,11 +31,9 @@
   <div id="cards" class="grid"></div>
 </main>
 <script>
-const SUPABASE_URL='https://faunfjguuupgwoleyuye.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY='sb_publishable_mWJK65OzhMn72ESsOwrbYA_F-TqovBO';
+const API_BASE='https://casamento-seven-nu.vercel.app/api';
 const NOIVOS_USERNAME='thaisecassio';
-const NOIVOS_EMAIL='noivos@thaisecassio.com.br';
-const SESSION_KEY='tc_noivos_supabase_session_v2';
+const SESSION_KEY='tc_noivos_session_v3';
 
 const brl=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(n)||0);
 const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -55,17 +53,14 @@ function showDashboard(){
   loginStatus.textContent='';
   loadCards();
 }
-function readSession(){
-  try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}catch{return null}
-}
+function readSession(){try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}catch{return null}}
 function writeSession(s){localStorage.setItem(SESSION_KEY,JSON.stringify(s))}
 function clearSession(){localStorage.removeItem(SESSION_KEY)}
 function sessionFromAuth(data){
   return {
     access_token:data.access_token,
     refresh_token:data.refresh_token,
-    expires_at:Date.now()+Math.max(30,(Number(data.expires_in)||3600))*1000,
-    user:data.user||null
+    expires_at:Date.now()+Math.max(30,(Number(data.expires_in)||3600))*1000
   };
 }
 async function parseResponse(res){
@@ -73,16 +68,16 @@ async function parseResponse(res){
   if(!text)return {};
   try{return JSON.parse(text)}catch{return {message:text}}
 }
-async function supabaseFetch(path,{method='GET',body=null,token=null,headers={}}={}){
-  const h={apikey:SUPABASE_PUBLISHABLE_KEY,...headers};
-  if(body!==null)h['Content-Type']='application/json';
-  if(token)h.Authorization='Bearer '+token;
-  return fetch(SUPABASE_URL+path,{method,headers:h,body:body===null?undefined:JSON.stringify(body),cache:'no-store'});
+async function apiFetch(endpoint,{method='GET',body=null,token=null}={}){
+  const headers={'Accept':'application/json'};
+  if(body!==null)headers['Content-Type']='application/json';
+  if(token)headers['Authorization']='Bearer '+token;
+  return fetch(API_BASE+endpoint,{method,headers,body:body===null?undefined:JSON.stringify(body),cache:'no-store'});
 }
 async function refreshSession(session){
   if(!session?.refresh_token)return null;
   try{
-    const res=await supabaseFetch('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:{refresh_token:session.refresh_token}});
+    const res=await apiFetch('/refresh',{method:'POST',body:{refresh_token:session.refresh_token}});
     const data=await parseResponse(res);
     if(!res.ok||!data.access_token){clearSession();return null}
     const next=sessionFromAuth(data);writeSession(next);return next;
@@ -91,21 +86,16 @@ async function refreshSession(session){
 async function validSession(){
   let s=readSession();
   if(!s?.access_token)return null;
-  if((s.expires_at||0) < Date.now()+60000)s=await refreshSession(s);
-  if(!s)return null;
-  try{
-    const res=await supabaseFetch('/auth/v1/user',{token:s.access_token});
-    if(res.ok)return s;
-    if(res.status===401)return await refreshSession(s);
-    return null;
-  }catch{return null}
+  if((s.expires_at||0)<Date.now()+60000)s=await refreshSession(s);
+  return s;
 }
-function authErrorMessage(data,status){
-  const raw=String(data?.msg||data?.message||data?.error_description||data?.error||'').trim();
-  if(/invalid login credentials/i.test(raw))return 'Usuário ou senha incorretos no Supabase.';
-  if(/email not confirmed/i.test(raw))return 'O e-mail dos noivos ainda não está confirmado no Supabase.';
+function friendlyError(data,status){
+  const raw=String(data?.error||data?.message||'').trim();
+  if(/invalid login credentials|invalid_credentials/i.test(raw))return 'Usuário ou senha incorretos.';
+  if(/email not confirmed|email_not_confirmed/i.test(raw))return 'O acesso dos noivos ainda não está confirmado.';
   if(/rate limit/i.test(raw))return 'Muitas tentativas. Aguarde alguns instantes e tente novamente.';
-  return raw ? `Falha do Supabase: ${raw}` : `Não foi possível entrar (erro ${status}).`;
+  if(status===502)return 'O servidor intermediário não conseguiu falar com o Supabase. Tente novamente em alguns segundos.';
+  return raw||`Não foi possível entrar (erro ${status}).`;
 }
 
 document.getElementById('loginForm').addEventListener('submit',async e=>{
@@ -115,33 +105,30 @@ document.getElementById('loginForm').addEventListener('submit',async e=>{
   loginStatus.classList.remove('ok');
   if(user!==NOIVOS_USERNAME){loginStatus.textContent='Usuário ou senha incorretos.';return}
   if(!password){loginStatus.textContent='Digite a senha.';return}
-  loginBtn.disabled=true;loginBtn.textContent='Entrando…';loginStatus.textContent='Conectando ao Supabase…';
+  loginBtn.disabled=true;loginBtn.textContent='Entrando…';loginStatus.textContent='Validando acesso…';
   try{
-    const res=await supabaseFetch('/auth/v1/token?grant_type=password',{method:'POST',body:{email:NOIVOS_EMAIL,password}});
+    const res=await apiFetch('/login',{method:'POST',body:{username:user,password}});
     const data=await parseResponse(res);
-    if(!res.ok||!data.access_token){
-      loginStatus.textContent=authErrorMessage(data,res.status);
-      return;
-    }
-    const session=sessionFromAuth(data);
-    writeSession(session);
+    if(!res.ok||!data.access_token){loginStatus.textContent=friendlyError(data,res.status);return}
+    const session=sessionFromAuth(data);writeSession(session);
     loginStatus.classList.add('ok');loginStatus.textContent='Login realizado.';
     showDashboard();
   }catch(err){
-    loginStatus.textContent='Não foi possível conectar ao Supabase. Verifique sua internet e tente novamente.';
+    loginStatus.textContent='Não foi possível acessar o servidor de login. Aguarde o deploy da Vercel e tente novamente.';
   }finally{
     loginBtn.disabled=false;loginBtn.textContent='Entrar';
   }
 });
 
-async function apiForCards(path,{method='GET',body=null,headers={}}={}){
+async function apiForCards({method='GET',id=null}={}){
   let s=await validSession();
   if(!s){showLogin('Sua sessão expirou. Entre novamente.');throw new Error('session')}
-  let res=await supabaseFetch(path,{method,body,token:s.access_token,headers});
+  const endpoint=id?'/cards?id='+encodeURIComponent(id):'/cards';
+  let res=await apiFetch(endpoint,{method,token:s.access_token});
   if(res.status===401){
     s=await refreshSession(s);
     if(!s){showLogin('Sua sessão expirou. Entre novamente.');throw new Error('session')}
-    res=await supabaseFetch(path,{method,body,token:s.access_token,headers});
+    res=await apiFetch(endpoint,{method,token:s.access_token});
   }
   return res;
 }
@@ -149,9 +136,9 @@ async function loadCards(){
   const box=document.getElementById('cards');
   box.innerHTML='<div class="empty">Carregando cartões…</div>';
   try{
-    const res=await apiForCards('/rest/v1/cartoes?select=id,created_at,name,message,gift_name,amount,payment_status&order=created_at.desc');
+    const res=await apiForCards();
     const data=await parseResponse(res);
-    if(!res.ok){box.innerHTML='<div class="empty">Não foi possível carregar os cartões. '+esc(data?.message||data?.details||('Erro '+res.status))+'</div>';return}
+    if(!res.ok){box.innerHTML='<div class="empty">Não foi possível carregar os cartões. '+esc(data?.error||data?.message||('Erro '+res.status))+'</div>';return}
     const list=Array.isArray(data)?data:[];
     if(!list.length){box.innerHTML='<div class="empty">Nenhum cartão recebido ainda.</div>';return}
     box.innerHTML=list.map(c=>`<article class="card"><div class="eyebrow">${new Date(c.created_at).toLocaleString('pt-BR')}</div><div class="name">${esc(c.name||'Convidado')}</div><div class="gift">${esc(c.gift_name)} • ${brl(c.amount)}</div><div class="meta">Pagamento: ${c.payment_status==='nao_verificado'?'não verificado':esc(c.payment_status)}</div>${c.message?`<div class="message">“${esc(c.message)}”</div>`:''}<div class="card-foot"><button class="btn danger" data-delete="${esc(c.id)}">Excluir</button></div></article>`).join('');
@@ -161,23 +148,24 @@ async function loadCards(){
 async function removeCard(id){
   if(!confirm('Excluir este cartão?'))return;
   try{
-    const res=await apiForCards('/rest/v1/cartoes?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{Prefer:'return=minimal'}});
-    if(!res.ok){const d=await parseResponse(res);alert('Não foi possível excluir: '+(d?.message||res.status));return}
+    const res=await apiForCards({method:'DELETE',id});
+    const data=await parseResponse(res);
+    if(!res.ok){alert('Não foi possível excluir: '+(data?.error||data?.message||res.status));return}
     loadCards();
   }catch{}
 }
 async function exportCards(){
   try{
-    const res=await apiForCards('/rest/v1/cartoes?select=*&order=created_at.desc');
+    const res=await apiForCards();
     const data=await parseResponse(res);
-    if(!res.ok){alert('Não foi possível exportar.');return}
-    const blob=new Blob([JSON.stringify(data||[],null,2)],{type:'application/json'});
+    if(!res.ok||!Array.isArray(data)){alert('Não foi possível exportar.');return}
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cartoes-thais-cassio.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
   }catch{}
 }
 async function logout(){
   const s=readSession();
-  try{if(s?.access_token)await supabaseFetch('/auth/v1/logout',{method:'POST',token:s.access_token})}catch{}
+  try{if(s?.access_token)await apiFetch('/logout',{method:'POST',token:s.access_token})}catch{}
   clearSession();showLogin();
 }
 
