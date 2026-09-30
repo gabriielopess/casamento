@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="theme-color" content="#a8793f">
+<title>Cartões • Thaís & Cássio</title>
+<style>
+:root{--bg:#f7f2e9;--paper:#fffdf9;--ink:#2f2924;--muted:#736a61;--gold:#b48a50;--gold2:#8b6738;--line:#e8dfd2;--shadow:0 18px 50px rgba(64,45,28,.10)}
+*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{width:min(980px,calc(100% - 28px));margin:auto}.serif{font-family:Georgia,"Times New Roman",serif}
+header{padding:34px 0 22px;border-bottom:1px solid var(--line);background:rgba(255,253,249,.82);backdrop-filter:blur(10px)}.brand{font:700 20px Georgia,serif;letter-spacing:-.03em}.brand span{color:var(--gold);font-size:.68em}.eyebrow{font-size:10px;letter-spacing:.20em;text-transform:uppercase;font-weight:800;color:var(--gold2)}h1{font:400 clamp(40px,7vw,66px)/1 Georgia,serif;margin:9px 0 10px}.intro{color:var(--muted);font-size:13px;line-height:1.7;max-width:650px}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:24px 0 10px}.count{font-size:12px;color:var(--muted)}.actions{display:flex;gap:8px}.btn{border:1px solid var(--gold);background:transparent;color:var(--gold2);border-radius:999px;padding:10px 15px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;cursor:pointer}.btn.primary{background:var(--gold);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding:14px 0 48px}.card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 8px 28px rgba(64,45,28,.05)}.date{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);font-weight:800}.name{font:600 25px/1.1 Georgia,serif;margin:8px 0 5px}.gift{font-size:11px;color:var(--muted);line-height:1.5}.message{margin-top:16px;padding-top:15px;border-top:1px solid var(--line);font:italic 18px/1.55 Georgia,serif;color:#4a4038}.empty,.error{grid-column:1/-1;text-align:center;padding:54px 22px;background:var(--paper);border:1px solid var(--line);border-radius:22px;color:var(--muted);line-height:1.7}.error{color:#8c4f4f}footer{padding:24px 0 44px;text-align:center;color:var(--muted);font-size:10px}
+@media(max-width:640px){header{padding:26px 0 18px}h1{font-size:42px}.intro{font-size:12px}.grid{grid-template-columns:1fr;gap:12px}.card{padding:18px;border-radius:18px}.name{font-size:23px}.message{font-size:17px}.toolbar{padding-top:18px}.btn{padding:9px 12px;font-size:9px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">T<span>&</span>C</div>
+    <div class="eyebrow" style="margin-top:24px">Área reservada dos noivos</div>
+    <h1>Cartões de carinho</h1>
+    <div class="intro">As mensagens deixadas pelos convidados ao escolher um presente aparecem aqui. Esta página não é vinculada ao site público.</div>
+  </div>
+</header>
+<main class="wrap">
+  <div class="toolbar">
+    <div id="count" class="count">Carregando…</div>
+    <div class="actions">
+      <button id="refresh" class="btn primary" type="button">Atualizar</button>
+      <button id="export" class="btn" type="button">Exportar</button>
+    </div>
+  </div>
+  <section id="cards" class="grid"><div class="empty">Carregando cartões…</div></section>
+</main>
+<footer>Thaís & Cássio • 2026</footer>
+<script>
+const SUPABASE_URL='https://faunfjguuupgwoleyuye.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_mWJK65OzhMn72ESsOwrbYA_F-TqovBO';
+const secret=decodeURIComponent((location.hash||'').replace(/^#/,''));
+let lastCards=[];
+const brl=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(n)||0);
+const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+function fmtDate(v){try{return new Date(v).toLocaleString('pt-BR',{dateStyle:'medium',timeStyle:'short'})}catch{return v||''}}
+function render(list){lastCards=Array.isArray(list)?list:[];document.getElementById('count').textContent=`${lastCards.length} ${lastCards.length===1?'cartão recebido':'cartões recebidos'}`;const box=document.getElementById('cards');if(!lastCards.length){box.innerHTML='<div class="empty">Nenhum cartão recebido ainda.</div>';return}box.innerHTML=lastCards.map(c=>`<article class="card"><div class="date">${esc(fmtDate(c.created_at))}</div><div class="name">${esc(c.name||'Convidado')}</div><div class="gift">${esc(c.gift_name||'Presente Especial')} • ${brl(c.amount)}</div>${c.message?`<div class="message">“${esc(c.message)}”</div>`:''}</article>`).join('')}
+async function loadCards(){const box=document.getElementById('cards');if(!secret){document.getElementById('count').textContent='Link reservado';box.innerHTML='<div class="error">Este endereço precisa ser aberto pelo link exclusivo dos noivos.</div>';return}box.innerHTML='<div class="empty">Carregando cartões…</div>';try{const res=await fetch(SUPABASE_URL+'/rest/v1/rpc/get_cartoes',{method:'POST',headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json'},body:JSON.stringify({p_secret:secret}),cache:'no-store'});const text=await res.text();let data=[];try{data=text?JSON.parse(text):[]}catch{}if(!res.ok){throw new Error(data?.message||data?.details||('Erro '+res.status))}render(data)}catch(err){document.getElementById('count').textContent='Não foi possível atualizar';box.innerHTML='<div class="error">Não foi possível carregar os cartões agora. Confira se a configuração do Supabase foi executada e tente novamente.</div>'}}
+function exportCards(){if(!lastCards.length)return;const blob=new Blob([JSON.stringify(lastCards,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cartoes-thais-cassio.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+document.getElementById('refresh').addEventListener('click',loadCards);document.getElementById('export').addEventListener('click',exportCards);loadCards();
+</script>
+</body>
+</html>
