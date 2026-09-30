@@ -240,154 +240,170 @@ footer{padding:42px 18px}footer h2{font-size:36px}footer p{font-size:10px}
 }
 
 
-/* Cartão opcional de carinho no PIX */
-.gift-note-box{margin:0 0 18px;padding:16px 18px;background:#fffdf9;border:1px solid var(--line);border-radius:18px}
-.gift-note-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;font:600 18px Georgia,serif}
-.gift-note-title em{font:800 9px/1 Inter,ui-sans-serif,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.12em;color:var(--gold2);background:#f5efe6;border-radius:999px;padding:7px 9px}
-.gift-note-grid{display:grid;grid-template-columns:.72fr 1.28fr;gap:10px}
-.gift-note-field{display:block;min-width:0}
-.gift-note-field>span{display:block;margin:0 0 6px;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold2)}
-.gift-note-field input,.gift-note-field textarea{display:block;width:100%;max-width:100%;border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px 11px;color:var(--ink);font:12px/1.4 Inter,ui-sans-serif,system-ui,sans-serif;outline:none;resize:vertical}
-.gift-note-field input:focus,.gift-note-field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(180,138,80,.10)}
-.gift-note-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
-.gift-note-bottom p{margin:0;color:var(--muted);font-size:10px;line-height:1.45}
-.gift-note-bottom .pill{padding:9px 13px;white-space:nowrap}
-.gift-note-status{min-height:15px;margin-top:7px;font-size:10px;font-weight:700;color:#5f6f55;text-align:right}
-/* As cinco novas fotos recebidas pelo casal: preservar o produto inteiro e centralizado. */
-.gift-card[data-gift-id="20"] .gift-image img,.gift-card[data-gift-id="27"] .gift-image img,.gift-card[data-gift-id="34"] .gift-image img,.gift-card[data-gift-id="41"] .gift-image img,.gift-card[data-gift-id="44"] .gift-image img{inset:8%;width:84%;height:84%;object-fit:contain;object-position:center center}
-@media(max-width:620px){
-  .gift-note-box{margin:7px 0 9px;padding:9px 10px;border-radius:12px}
-  .gift-note-title{font-size:14px;margin-bottom:7px;gap:7px}
-  .gift-note-title em{font-size:6px;padding:5px 6px}
-  .gift-note-grid{grid-template-columns:1fr;gap:7px}
-  .gift-note-field>span{font-size:6.5px;margin-bottom:4px}
-  .gift-note-field input,.gift-note-field textarea{border-radius:8px;padding:7px 8px;font-size:8px;line-height:1.3}
-  .gift-note-field textarea{min-height:46px;max-height:70px}
-  .gift-note-bottom{gap:7px;margin-top:7px;align-items:center}
-  .gift-note-bottom p{font-size:6.8px;line-height:1.25}
-  .gift-note-bottom .pill{padding:6px 8px;font-size:6px;letter-spacing:.035em}
-  .gift-note-status{min-height:10px;margin-top:4px;font-size:6.8px}
-  .gift-card[data-gift-id="20"] .gift-image img,.gift-card[data-gift-id="27"] .gift-image img,.gift-card[data-gift-id="34"] .gift-image img,.gift-card[data-gift-id="41"] .gift-image img,.gift-card[data-gift-id="44"] .gift-image img{inset:9%;width:82%;height:82%}
+/* Ajustes finais — presentes, história e PIX móvel */
+.gift-card[data-gift-id="20"] .gift-image img,
+.gift-card[data-gift-id="27"] .gift-image img,
+.gift-card[data-gift-id="34"] .gift-image img,
+.gift-card[data-gift-id="41"] .gift-image img,
+.gift-card[data-gift-id="44"] .gift-image img{
+  inset:8%;width:84%;height:84%;object-fit:contain;object-position:center center
 }
 
-/* Ajustes antigos da história (sobrescritos pela versão final abaixo) */
-.story.story-newspaper{display:block!important;overflow:auto;align-items:initial!important;gap:0!important}
-.story.story-newspaper .story-photo{float:right!important;width:min(47%,500px)!important;height:auto!important;aspect-ratio:854/1280!important;object-fit:cover!important;object-position:center!important;margin:0 0 20px 48px!important;border-radius:16px!important;max-width:none!important;max-height:none!important;background:#fff}
-.story.story-newspaper .story-copy{display:block;min-width:0}
-.story.story-newspaper .story-copy p{margin:0 0 16px;color:var(--muted);font-size:15px;line-height:1.82;text-align:justify;text-justify:inter-word;hyphens:auto}
-.story.story-newspaper:after{content:"";display:block;clear:both}
-.admin-link{white-space:nowrap}
-@media(max-width:620px){
-  .story.story-newspaper{display:block!important;overflow:auto!important}
-  .story.story-newspaper .story-photo{float:right!important;width:56%!important;margin:0 0 8px 10px!important;border-radius:11px!important}
-  .story.story-newspaper .story-copy h2{font-size:20px!important;line-height:1.04!important;margin:5px 0 10px!important}
-  .story.story-newspaper .story-copy p{font-size:9.2px!important;line-height:1.48!important;margin:0 0 8px!important;text-align:justify!important;text-justify:inter-word;hyphens:auto}
-  nav{gap:10px!important}
-  nav .admin-link{font-size:8px!important;letter-spacing:.06em!important}
+/* Nossa História — composição editorial limpa com movimento suave */
+.story-section{
+  position:relative;
+  overflow:hidden;
+  padding-top:104px;
+  padding-bottom:104px;
 }
-
-
-/* Versão final estável da seção Nossa História */
-.story.story-final{
+.story-section:before{
+  content:"";
+  position:absolute;
+  width:420px;height:420px;
+  left:-240px;top:18%;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(180,138,80,.10),rgba(180,138,80,0) 68%);
+  pointer-events:none;
+}
+.story-editorial{
   display:grid!important;
-  grid-template-columns:minmax(0,1fr) minmax(340px,.82fr)!important;
-  gap:56px!important;
+  grid-template-columns:minmax(340px,.92fr) minmax(0,1.08fr)!important;
+  grid-template-areas:"visual heading" "visual text"!important;
+  column-gap:clamp(42px,6vw,78px)!important;
+  row-gap:20px!important;
   align-items:center!important;
-  overflow:visible!important;
 }
-.story.story-final .story-copy{display:block!important;min-width:0}
-.story.story-final .story-copy p{
-  margin:0 0 16px!important;
-  color:var(--muted)!important;
-  font-size:15px!important;
-  line-height:1.82!important;
-  text-align:left!important;
-  hyphens:none!important;
+.story-heading{grid-area:heading;align-self:end;min-width:0}
+.story-heading h2{
+  font:400 clamp(42px,5vw,64px)/1.03 Georgia,"Times New Roman",serif;
+  letter-spacing:-.025em;
+  margin:10px 0 0;
+  max-width:650px;
 }
-.story.story-final .story-photo{
-  float:none!important;
+.story-text{grid-area:text;align-self:start;max-width:690px;min-width:0}
+.story-text p{
+  margin:0 0 17px;
+  color:var(--muted);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;
+  line-height:1.84;
+  text-align:left;
+}
+.story-visual{
+  grid-area:visual;
+  position:relative;
+  width:min(100%,470px);
+  margin:0;
+  justify-self:center;
+  align-self:center;
+  opacity:0;
+  transform:translate3d(-36px,18px,0) scale(.975);
+  transition:opacity .7s ease,transform .9s cubic-bezier(.2,.8,.2,1);
+}
+.story-visual:before{
+  content:"";
+  position:absolute;
+  inset:8% -8% -7% 10%;
+  border-radius:28px;
+  background:linear-gradient(145deg,rgba(180,138,80,.16),rgba(255,253,249,.08));
+  transform:rotate(-2.5deg);
+  z-index:-1;
+}
+.story-photo-shell{
+  position:relative;
+  overflow:hidden;
+  border-radius:22px;
+  background:#fff;
+  box-shadow:0 24px 60px rgba(65,45,27,.13);
+}
+.story-photo-shell img.story-photo{
   display:block!important;
-  width:min(100%,430px)!important;
+  width:100%!important;
   height:auto!important;
   aspect-ratio:auto!important;
   object-fit:contain!important;
-  object-position:center!important;
-  margin:0!important;
+  object-position:center center!important;
   max-width:none!important;
   max-height:none!important;
-  border-radius:16px!important;
-  justify-self:center!important;
-  align-self:center!important;
-  background:transparent!important;
+  margin:0!important;
+  border-radius:0!important;
+  background:#fff!important;
 }
-.story.story-final .story-rest{display:block}
+.story-photo-shell:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(90deg,rgba(247,242,233,.06),transparent 22%,transparent 78%,rgba(247,242,233,.05));
+}
+.story-heading,.story-text{
+  opacity:0;
+  transform:translate3d(0,20px,0);
+  transition:opacity .58s ease,transform .74s ease;
+}
+.story-text{transition-delay:.10s}
+.story-editorial.is-visible .story-visual,
+.story-editorial.is-visible .story-heading,
+.story-editorial.is-visible .story-text{opacity:1;transform:none}
+
+/* Modal PIX: sem barra visual e sem zoom de campo no celular */
+.modal,.pixcode{scrollbar-width:none}
+.modal::-webkit-scrollbar,.pixcode::-webkit-scrollbar{display:none}
+.modal{overscroll-behavior:contain}
+html.pix-open,body.pix-open{overflow:hidden!important;overscroll-behavior:none}
 
 @media(max-width:620px){
-  .story.story-final{
+  .gift-card[data-gift-id="20"] .gift-image img,
+  .gift-card[data-gift-id="27"] .gift-image img,
+  .gift-card[data-gift-id="34"] .gift-image img,
+  .gift-card[data-gift-id="41"] .gift-image img,
+  .gift-card[data-gift-id="44"] .gift-image img{inset:9%;width:82%;height:82%}
+
+  .story-section{padding-top:54px;padding-bottom:60px}
+  .story-section:before{width:260px;height:260px;left:-160px;top:30%}
+  .story-editorial{
     display:grid!important;
-    grid-template-columns:minmax(0,1fr) 42%!important;
-    column-gap:10px!important;
-    row-gap:0!important;
-    align-items:start!important;
+    grid-template-columns:1fr!important;
+    grid-template-areas:"heading" "visual" "text"!important;
+    row-gap:18px!important;
+    width:min(calc(100% - 28px),1160px)!important;
   }
-  .story.story-final .story-copy{display:contents!important}
-  .story.story-final .story-copy>.eyebrow{
-    grid-column:1!important;
-    grid-row:1!important;
-    align-self:start;
+  .story-heading{width:100%}
+  .story-heading h2{
+    font-size:31px!important;
+    line-height:1.06!important;
+    margin:6px 0 0!important;
+    max-width:360px;
   }
-  .story.story-final .story-copy>h2{
-    grid-column:1!important;
-    grid-row:2!important;
-    font-size:20px!important;
-    line-height:1.04!important;
-    margin:5px 0 9px!important;
+  .story-visual{
+    width:min(92%,390px)!important;
+    justify-self:center!important;
+    margin:2px auto 4px!important;
+    transform:translate3d(0,22px,0) scale(.975);
   }
-  .story.story-final .story-lead{
-    grid-column:1!important;
-    grid-row:3!important;
-    font-size:9.6px!important;
-    line-height:1.56!important;
-    margin:0!important;
-  }
-  .story.story-final .story-photo{
-    grid-column:2!important;
-    grid-row:1 / span 3!important;
-    width:100%!important;
-    max-width:150px!important;
-    justify-self:end!important;
-    align-self:start!important;
-    border-radius:10px!important;
-    margin:0!important;
-  }
-  .story.story-final .story-rest{
-    grid-column:1 / -1!important;
-    grid-row:4!important;
-    margin-top:10px!important;
-  }
-  .story.story-final .story-rest p{
-    font-size:10px!important;
-    line-height:1.62!important;
-    margin:0 0 9px!important;
+  .story-visual:before{inset:7% -5% -5% 8%;border-radius:20px}
+  .story-photo-shell{border-radius:17px;box-shadow:0 18px 42px rgba(65,45,27,.12)}
+  .story-text{max-width:none!important;width:100%}
+  .story-text p{
+    font-size:13.5px!important;
+    line-height:1.72!important;
+    margin:0 0 14px!important;
     text-align:left!important;
   }
+  #customValue,#amountInput{font-size:16px!important}
+  .modal{
+    max-height:calc(100dvh - 12px)!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    scrollbar-width:none!important;
+  }
+  .modal::-webkit-scrollbar{display:none!important}
+  .qr-wrap{width:142px!important;max-width:43vw!important}
+  .pixcode{max-height:42px!important}
 }
-
-
-/* ===== História editorial + cartões secretos + refinamento móvel ===== */
-.story-section{overflow:hidden}
-.story-editorial{display:grid!important;grid-template-columns:minmax(0,1.08fr) minmax(330px,.92fr)!important;grid-template-areas:"heading visual" "text visual";column-gap:clamp(38px,5vw,72px)!important;row-gap:18px!important;align-items:center!important}
-.story-heading{grid-area:heading;align-self:end}.story-heading h2{font:400 clamp(42px,5vw,64px)/1.02 Georgia,"Times New Roman",serif;margin:10px 0 0;letter-spacing:-.025em}
-.story-text{grid-area:text;align-self:start;max-width:680px}.story-text p{margin:0 0 16px;color:var(--muted);font-size:15px;line-height:1.84;text-align:left}
-.story-visual{grid-area:visual;margin:0;width:min(100%,440px);justify-self:end;position:relative;opacity:0;transform:translate3d(34px,0,0) scale(.985);transition:opacity .75s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
-.story-editorial.is-visible .story-visual{opacity:1;transform:none}.story-heading,.story-text{opacity:0;transform:translate3d(0,16px,0);transition:opacity .6s ease,transform .72s ease}.story-editorial.is-visible .story-heading,.story-editorial.is-visible .story-text{opacity:1;transform:none}
-.story-photo-shell{position:relative;overflow:hidden;border-radius:22px;background:#fff;box-shadow:0 22px 50px rgba(69,49,28,.10);isolation:isolate}.story-photo-shell img.story-photo{display:block!important;width:100%!important;height:auto!important;aspect-ratio:854/1280!important;object-fit:cover!important;object-position:center center!important;margin:0!important;max-width:none!important;max-height:none!important;border-radius:0!important;background:#fff!important}.story-photo-shell:before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(247,242,233,.16),transparent 14%),linear-gradient(0deg,rgba(247,242,233,.10),transparent 16%)}
-.modal,.pixcode{scrollbar-width:none}.modal::-webkit-scrollbar,.pixcode::-webkit-scrollbar{display:none}.modal{overscroll-behavior:contain}.gift-note-field textarea{resize:none}html.pix-open,body.pix-open{overflow:hidden!important;overscroll-behavior:none}
-@media(max-width:620px){
-.story-section{padding-top:48px;padding-bottom:54px}.story-editorial{display:grid!important;grid-template-columns:1fr!important;grid-template-areas:"heading" "visual" "text"!important;row-gap:18px!important;width:min(calc(100% - 24px),1160px)!important}.story-heading h2{font-size:30px!important;line-height:1.04!important;margin:6px 0 0!important;max-width:330px}.story-visual{width:min(78%,320px)!important;justify-self:end!important;margin:0!important;transform:translate3d(22px,0,0) scale(.985)}.story-photo-shell{border-radius:14px}.story-photo-shell:before{background:linear-gradient(90deg,rgba(247,242,233,.22),transparent 18%),linear-gradient(0deg,rgba(247,242,233,.12),transparent 18%)}.story-text{max-width:none!important}.story-text p{font-size:13px!important;line-height:1.74!important;margin:0 0 13px!important;text-align:left!important}
-#customValue,#amountInput,#giftGiverName,#giftMessage{font-size:16px!important}
-.modal{max-height:calc(100dvh - 12px)!important;overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:none!important}.modal::-webkit-scrollbar{display:none!important}.gift-note-box{margin:7px 0 8px!important;padding:8px 9px!important;border-radius:12px!important}.gift-note-title{font-size:13px!important;margin-bottom:6px!important}.gift-note-title em{font-size:6px!important;padding:4px 6px!important}.gift-note-grid{grid-template-columns:1fr!important;gap:6px!important}.gift-note-field>span{font-size:6.5px!important;margin-bottom:3px!important}.gift-note-field input,.gift-note-field textarea{width:100%!important;border-radius:8px!important;padding:7px 8px!important;line-height:1.25!important}.gift-note-field textarea{height:42px!important;min-height:42px!important;max-height:42px!important}.gift-note-bottom{margin-top:6px!important;gap:6px!important}.gift-note-bottom p{font-size:6.8px!important;line-height:1.25!important}.gift-note-bottom .pill{flex:0 0 auto!important;padding:6px 8px!important;font-size:6px!important}.gift-note-status{font-size:6.8px!important;min-height:8px!important;margin-top:3px!important}.qr-wrap{width:132px!important;max-width:40vw!important}.pixcode{max-height:38px!important}}
-@media(prefers-reduced-motion:reduce){.story-visual,.story-heading,.story-text{opacity:1!important;transform:none!important;transition:none!important}}
+@media(prefers-reduced-motion:reduce){
+  .story-visual,.story-heading,.story-text{opacity:1!important;transform:none!important;transition:none!important}
+}
 
 </style>
 </head>
@@ -548,26 +564,7 @@ footer{padding:42px 18px}footer h2{font-size:36px}footer p{font-size:10px}
       <label for="amountInput">Valor do PIX</label>
       <input id="amountInput" class="amount-input" type="number" min="1" step="0.01" inputmode="decimal">
       <div class="amount-help">Você pode manter o valor do presente ou digitar outro valor. O QR é atualizado automaticamente.</div>
-    
-    <div class="gift-note-box">
-      <div class="gift-note-title"><span>Um carinho para os noivos</span><em>opcional</em></div>
-      <div class="gift-note-grid">
-        <label class="gift-note-field" for="giftGiverName">
-          <span>Quem está nos presenteando?</span>
-          <input id="giftGiverName" type="text" autocomplete="name" maxlength="80" placeholder="Seu nome">
-        </label>
-        <label class="gift-note-field gift-note-message" for="giftMessage">
-          <span>Mensagem de carinho</span>
-          <textarea id="giftMessage" rows="2" maxlength="500" placeholder="Escreva uma mensagem para Thaís & Cássio"></textarea>
-        </label>
-      </div>
-      <div class="gift-note-bottom">
-        <p>Se preencher, o cartão fica guardado para os noivos. Você pode pular.</p>
-        <button id="saveGiftNote" class="pill outline-btn" type="button">Guardar carinho</button>
-      </div>
-      <div id="giftNoteStatus" class="gift-note-status" aria-live="polite"></div>
     </div>
-</div>
     <div class="pix-grid">
       <div class="qr-wrap"><img id="qrImg" alt="QR Code PIX"><div id="qrFallback" style="display:none;text-align:center;font-size:12px;color:#736a61">Não foi possível carregar a imagem do QR. Use o PIX Copia e Cola abaixo.</div></div>
       <div>
@@ -590,10 +587,7 @@ const PIX_KEY='11089110642';
 const PIX_KEY_DISPLAY='110.891.106-42';
 const MERCHANT='CASSIO COSTA RODRIGUES';
 const CITY='UBA';
-const SUPABASE_URL='https://faunfjguuupgwoleyuye.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY='sb_publishable_mWJK65OzhMn72ESsOwrbYA_F-TqovBO';
-let lastGiftMessageFingerprint='';
-let current={gift:null, basePrice:0, custom:false, code:'', cardId:null};
+let current={gift:null, basePrice:0, custom:false, code:''};
 let qrProvider=0;
 let qrTimer=null;
 const giftBatch=()=>window.matchMedia('(max-width:620px)').matches?10:9;
@@ -649,10 +643,8 @@ function pixPayload(amount,desc,txid){
   return p+crc16(p);
 }
 
-function newCardId(){return (globalThis.crypto&&crypto.randomUUID)?crypto.randomUUID():'card-'+Date.now()+'-'+Math.random().toString(16).slice(2)}
-function resetGiftNote(){lastGiftMessageFingerprint='';const name=document.getElementById('giftGiverName'),msg=document.getElementById('giftMessage'),status=document.getElementById('giftNoteStatus');if(name)name.value='';if(msg)msg.value='';if(status)status.textContent=''}
-function openGift(id){const g=GIFTS.find(x=>x.id===id);if(!g)return;current={gift:g,basePrice:g.price,custom:false,code:'',cardId:newCardId()};document.getElementById('modalTitle').textContent=g.name;document.getElementById('modalSubtitle').textContent=`Valor sugerido da lista: ${brl(g.price)}`;document.getElementById('amountInput').value=g.price.toFixed(2);resetGiftNote();showModal();updatePix(true)}
-function openCustom(value){current={gift:null,basePrice:value,custom:true,code:'',cardId:newCardId()};document.getElementById('modalTitle').textContent='Presente Especial';document.getElementById('modalSubtitle').textContent='Uma contribuição livre escolhida por você.';document.getElementById('amountInput').value=Number(value).toFixed(2);resetGiftNote();showModal();updatePix(true)}
+function openGift(id){const g=GIFTS.find(x=>x.id===id);if(!g)return;current={gift:g,basePrice:g.price,custom:false,code:''};document.getElementById('modalTitle').textContent=g.name;document.getElementById('modalSubtitle').textContent=`Valor sugerido da lista: ${brl(g.price)}`;document.getElementById('amountInput').value=g.price.toFixed(2);showModal();updatePix(true)}
+function openCustom(value){current={gift:null,basePrice:value,custom:true,code:''};document.getElementById('modalTitle').textContent='Presente Especial';document.getElementById('modalSubtitle').textContent='Uma contribuição livre escolhida por você.';document.getElementById('amountInput').value=Number(value).toFixed(2);showModal();updatePix(true)}
 function showModal(){document.getElementById('modalBg').classList.add('show');document.getElementById('modalBg').setAttribute('aria-hidden','false');document.documentElement.classList.add('pix-open');document.body.classList.add('pix-open')}
 function hideModal(){document.getElementById('modalBg').classList.remove('show');document.getElementById('modalBg').setAttribute('aria-hidden','true');document.documentElement.classList.remove('pix-open');document.body.classList.remove('pix-open')}
 
@@ -686,10 +678,6 @@ async function copyText(text,ok){
   toast(ok);
 }
 function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>e.classList.remove('show'),2400)}
-
-function giftMessageCard(){const name=(document.getElementById('giftGiverName')?.value||'').trim();const message=(document.getElementById('giftMessage')?.value||'').trim();const amount=Number(document.getElementById('amountInput')?.value||0);return{id:current.cardId||newCardId(),name,message,giftId:current.gift?.id||null,giftName:current.gift?.name||'Presente Especial',amount:Number.isFinite(amount)?amount:0}}
-async function persistGiftMessage(card){const res=await fetch(SUPABASE_URL+'/rest/v1/rpc/save_cartao',{method:'POST',headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json'},body:JSON.stringify({p_client_id:card.id,p_name:card.name||null,p_message:card.message||null,p_gift_id:card.giftId,p_gift_name:card.giftName,p_amount:card.amount}),cache:'no-store'});if(!res.ok){let detail='';try{const d=await res.json();detail=d?.message||d?.details||d?.hint||''}catch(_){}throw new Error(detail||('Erro '+res.status))}return true}
-async function saveGiftMessage({silent=false}={}){const status=document.getElementById('giftNoteStatus');const card=giftMessageCard();if(!card.name&&!card.message){if(!silent&&status)status.textContent='Preencha o nome ou a mensagem, ou pule esta etapa.';return false}if(!Number.isFinite(card.amount)||card.amount<=0){if(!silent&&status)status.textContent='Digite um valor válido para o PIX.';return false}const fingerprint=JSON.stringify([card.name,card.message,card.giftId,card.giftName,Number(card.amount).toFixed(2)]);if(fingerprint===lastGiftMessageFingerprint){if(!silent&&status)status.textContent='Carinho já guardado ❤️';return true}try{await persistGiftMessage(card);lastGiftMessageFingerprint=fingerprint;if(status)status.textContent='Carinho guardado para os noivos ❤️';if(!silent)toast('Cartão guardado ❤️');return true}catch(err){if(status)status.textContent='O PIX segue normal; não foi possível guardar o cartão agora.';return false}}
 
 const CERIMONIALISTA_WHATSAPP='5532999190941';
 function renderCompanions(){
@@ -742,9 +730,8 @@ document.getElementById('rsvpForm').addEventListener('submit',submitRsvp);
 renderCompanions();
 document.getElementById('customBtn').addEventListener('click',()=>{const v=Number(document.getElementById('customValue').value);if(!Number.isFinite(v)||v<=0)return toast('Digite um valor válido.');openCustom(v)});
 document.getElementById('amountInput').addEventListener('input',()=>updatePix(false));
-document.getElementById('saveGiftNote').addEventListener('click',()=>saveGiftMessage());
-document.getElementById('copyPix').addEventListener('click',()=>{void saveGiftMessage({silent:true});if(current.code)copyText(current.code,'PIX Copia e Cola copiado!')});
-document.getElementById('copyKey').addEventListener('click',()=>{void saveGiftMessage({silent:true});copyText(PIX_KEY,'Chave PIX CPF copiada!')});
+document.getElementById('copyPix').addEventListener('click',()=>{if(current.code)copyText(current.code,'PIX Copia e Cola copiado!')});
+document.getElementById('copyKey').addEventListener('click',()=>copyText(PIX_KEY,'Chave PIX CPF copiada!'));
 document.getElementById('closeModal').addEventListener('click',hideModal);
 document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg')hideModal()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hideModal()});
