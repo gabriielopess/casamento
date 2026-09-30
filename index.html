@@ -390,7 +390,7 @@ html.pix-open,body.pix-open{overflow:hidden!important;overscroll-behavior:none}
     margin:0 0 14px!important;
     text-align:left!important;
   }
-  #customValue,#amountInput{font-size:16px!important}
+  #customValue{font-size:16px!important}
   .modal{
     max-height:calc(100dvh - 12px)!important;
     overflow-y:auto!important;
@@ -446,6 +446,99 @@ html.pix-open,body.pix-open{overflow:hidden!important;overscroll-behavior:none}
 @media(prefers-reduced-motion:reduce){
   .soft-reveal{opacity:1!important;transform:none!important;transition:none!important}
   .pill,.day-card,.dress-card,.freepix,.rsvp-card{transition:none!important}
+}
+
+
+/* Ajuste solicitado — história mais compacta, PIX fixo e abertura com motion sutil */
+.story-text p{
+  line-height:1.68!important;
+  margin-bottom:14px!important;
+  text-align:justify!important;
+  text-justify:inter-word;
+  hyphens:auto;
+}
+.fixed-amount{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+}
+.amount-label{
+  display:block;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-weight:800;
+  color:var(--gold2);
+}
+.amount-value{
+  display:block;
+  font:600 30px/1 Georgia,serif;
+  color:var(--ink);
+  white-space:nowrap;
+}
+.modal-actions{grid-template-columns:1fr}
+.close{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  line-height:1;
+  flex:0 0 auto;
+}
+.close span{width:100%;height:100%;display:flex;align-items:center;justify-content:center;line-height:1;transform:translateY(-.5px)}
+
+@keyframes hero-photo-intro{
+  from{transform:scale(1.035);filter:brightness(.9) saturate(.94)}
+  to{transform:scale(1);filter:brightness(1) saturate(1)}
+}
+@keyframes hero-copy-intro{
+  from{opacity:0;transform:translate3d(0,16px,0)}
+  to{opacity:1;transform:none}
+}
+@keyframes hero-line-intro{
+  from{opacity:0;transform:scaleX(0)}
+  to{opacity:1;transform:scaleX(1)}
+}
+.hero-photo{
+  transform-origin:center center;
+  animation:hero-photo-intro 1.45s cubic-bezier(.2,.8,.2,1) both;
+}
+.hero-inner .eyebrow,.hero-inner h1,.hero-inner .date,.hero-inner .countdown{
+  opacity:0;
+  animation:hero-copy-intro .68s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.hero-inner .eyebrow{animation-delay:.18s}
+.hero-inner h1{animation-delay:.30s}
+.hero-inner .date{animation-delay:.43s}
+.hero-inner .countdown{animation-delay:.56s}
+.hero-inner:after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-11px;
+  display:block;
+  width:48px;
+  height:1px;
+  background:rgba(232,202,142,.86);
+  transform-origin:left center;
+  opacity:0;
+  animation:hero-line-intro .7s .72s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@media(max-width:620px){
+  .story-text p{line-height:1.58!important;margin-bottom:12px!important;text-align:justify!important}
+  .fixed-amount{margin:9px 0 8px;padding:10px 11px 9px;align-items:center}
+  .amount-label{font-size:7px;letter-spacing:.09em}
+  .amount-value{font-size:20px}
+  .hero-inner:after{width:32px;bottom:-6px}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-photo,.hero-inner .eyebrow,.hero-inner h1,.hero-inner .date,.hero-inner .countdown,.hero-inner:after{
+    animation:none!important;
+    opacity:1!important;
+    transform:none!important;
+    filter:none!important;
+  }
 }
 
 </style>
@@ -524,7 +617,7 @@ html.pix-open,body.pix-open{overflow:hidden!important;overscroll-behavior:none}
 
 <section id="presentes" class="section gifts">
   <div class="wrap">
-    <div class="title"><div class="eyebrow">Lista de Presentes</div><h2>Todos os presentes</h2><p>Escolha um item. O valor do presente entra automaticamente no PIX, e você também pode ajustar o valor antes de gerar o QR Code.</p></div>
+    <div class="title"><div class="eyebrow">Lista de Presentes</div><h2>Todos os presentes</h2><p>Escolha um item. O valor do presente entra automaticamente no PIX e permanece fixo para gerar o QR Code.</p></div>
     <div class="toolbar">
       <input id="search" class="control" type="search" placeholder="Buscar presente..." aria-label="Buscar presente">
       <select id="sort" class="control" aria-label="Ordenar presentes">
@@ -542,7 +635,7 @@ html.pix-open,body.pix-open{overflow:hidden!important;overscroll-behavior:none}
     <div class="card freepix">
       <div class="eyebrow">PIX livre</div>
       <h3>Prefere escolher outro valor?</h3>
-      <p>Digite o valor que deseja oferecer. O QR Code e o PIX Copia e Cola serão atualizados com esse valor.</p>
+      <p>Digite o valor que deseja oferecer e clique em Gerar PIX. O QR Code e o PIX Copia e Cola serão gerados com esse valor.</p>
       <div class="free-row">
         <input id="customValue" class="control" type="number" min="1" step="0.01" inputmode="decimal" placeholder="Ex.: 100,00">
         <button id="customBtn" class="pill gold-btn">Gerar PIX</button>
@@ -598,24 +691,21 @@ html.pix-open,body.pix-open{overflow:hidden!important;overscroll-behavior:none}
       <div>
         <div class="eyebrow">Você escolheu</div>
         <h3 id="modalTitle">Presente</h3>
-        <div id="modalSubtitle" class="sub"></div>
       </div>
-      <button class="close" id="closeModal" aria-label="Fechar">×</button>
+      <button class="close" id="closeModal" aria-label="Fechar"><span aria-hidden="true">×</span></button>
     </div>
 
-    <div class="amount-box">
-      <label for="amountInput">Valor do PIX</label>
-      <input id="amountInput" class="amount-input" type="number" min="1" step="0.01" inputmode="decimal">
-      <div class="amount-help">Você pode manter o valor do presente ou digitar outro valor. O QR é atualizado automaticamente.</div>
+    <div class="amount-box fixed-amount">
+      <span class="amount-label">Valor do PIX</span>
+      <strong id="pixValueText" class="amount-value">—</strong>
     </div>
     <div class="pix-grid">
       <div class="qr-wrap"><img id="qrImg" alt="QR Code PIX"><div id="qrFallback" style="display:none;text-align:center;font-size:12px;color:#736a61">Não foi possível carregar a imagem do QR. Use o PIX Copia e Cola abaixo.</div></div>
       <div>
-        <div class="pix-meta"><strong>Favorecido:</strong> Cassio Costa Rodrigues<br><strong>Chave:</strong> CPF 110.891.106-42<br><strong>Valor:</strong> <span id="pixValueText">—</span></div>
+        <div class="pix-meta"><strong>Favorecido:</strong> Cassio Costa Rodrigues<br><strong>Chave CPF:</strong> 110.891.106-42</div>
         <div id="pixCode" class="pixcode"></div>
         <div class="modal-actions">
           <button id="copyPix" class="pill gold-btn">Copiar PIX Copia e Cola</button>
-          <button id="copyKey" class="pill outline-btn">Copiar chave CPF</button>
         </div>
         <div class="pix-confirm-note">A confirmação do pagamento não será automática. Depois de pagar pelo QR Code ou PIX Copia e Cola, você pode fechar esta janela normalmente.</div>
         <div id="copyStatus" class="status"></div>
@@ -688,24 +778,20 @@ function pixPayload(amount,desc,txid){
   return p+crc16(p);
 }
 
-function openGift(id){const g=GIFTS.find(x=>x.id===id);if(!g)return;current={gift:g,basePrice:g.price,custom:false,code:''};document.getElementById('modalTitle').textContent=g.name;document.getElementById('modalSubtitle').textContent=`Valor sugerido da lista: ${brl(g.price)}`;document.getElementById('amountInput').value=g.price.toFixed(2);showModal();updatePix(true)}
-function openCustom(value){current={gift:null,basePrice:value,custom:true,code:''};document.getElementById('modalTitle').textContent='Presente Especial';document.getElementById('modalSubtitle').textContent='Uma contribuição livre escolhida por você.';document.getElementById('amountInput').value=Number(value).toFixed(2);showModal();updatePix(true)}
+function openGift(id){const g=GIFTS.find(x=>x.id===id);if(!g)return;current={gift:g,basePrice:g.price,custom:false,code:''};document.getElementById('modalTitle').textContent=g.name;showModal();updatePix()}
+function openCustom(value){current={gift:null,basePrice:Number(value),custom:true,code:''};document.getElementById('modalTitle').textContent='Presente Especial';showModal();updatePix()}
 function showModal(){document.getElementById('modalBg').classList.add('show');document.getElementById('modalBg').setAttribute('aria-hidden','false');document.documentElement.classList.add('pix-open');document.body.classList.add('pix-open')}
 function hideModal(){document.getElementById('modalBg').classList.remove('show');document.getElementById('modalBg').setAttribute('aria-hidden','true');document.documentElement.classList.remove('pix-open');document.body.classList.remove('pix-open')}
 
-function updatePix(immediate=false){
-  clearTimeout(qrTimer);
-  const run=()=>{
-    const amount=Number(document.getElementById('amountInput').value);
-    if(!Number.isFinite(amount)||amount<=0){document.getElementById('pixCode').textContent='Digite um valor válido.';document.getElementById('pixValueText').textContent='—';return}
-    const desc=current.gift?`PRESENTE ${String(current.gift.id).padStart(2,'0')}`:'PRESENTE ESPECIAL';
-    const txid=current.gift?`CASAMENTO${String(current.gift.id).padStart(2,'0')}`:'CASAMENTOLIVRE';
-    current.code=pixPayload(amount,desc,txid);
-    document.getElementById('pixCode').textContent=current.code;
-    document.getElementById('pixValueText').textContent=brl(amount);
-    loadQr(current.code);
-  };
-  if(immediate)run(); else qrTimer=setTimeout(run,280);
+function updatePix(){
+  const amount=Number(current.basePrice);
+  if(!Number.isFinite(amount)||amount<=0){document.getElementById('pixCode').textContent='Digite um valor válido.';document.getElementById('pixValueText').textContent='—';return}
+  const desc=current.gift?`PRESENTE ${String(current.gift.id).padStart(2,'0')}`:'PRESENTE ESPECIAL';
+  const txid=current.gift?`CASAMENTO${String(current.gift.id).padStart(2,'0')}`:'CASAMENTOLIVRE';
+  current.code=pixPayload(amount,desc,txid);
+  document.getElementById('pixCode').textContent=current.code;
+  document.getElementById('pixValueText').textContent=brl(amount);
+  loadQr(current.code);
 }
 function loadQr(code){
   qrProvider=0;
@@ -803,9 +889,7 @@ document.getElementById('companionCount').addEventListener('change',renderCompan
 document.getElementById('rsvpForm').addEventListener('submit',submitRsvp);
 renderCompanions();
 document.getElementById('customBtn').addEventListener('click',()=>{const v=Number(document.getElementById('customValue').value);if(!Number.isFinite(v)||v<=0)return toast('Digite um valor válido.');openCustom(v)});
-document.getElementById('amountInput').addEventListener('input',()=>updatePix(false));
 document.getElementById('copyPix').addEventListener('click',()=>{if(current.code)copyText(current.code,'PIX Copia e Cola copiado!')});
-document.getElementById('copyKey').addEventListener('click',()=>copyText(PIX_KEY,'Chave PIX CPF copiada!'));
 document.getElementById('closeModal').addEventListener('click',hideModal);
 document.getElementById('modalBg').addEventListener('click',e=>{if(e.target.id==='modalBg')hideModal()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hideModal()});
